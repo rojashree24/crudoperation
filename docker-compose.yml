@@ -1,14 +1,40 @@
+# version: '3'
+# services:
+#   web:
+#     image: "docker-node-mongo"
+#     build: .
+#     command: "npm start"
+#     ports:
+#       - "5000:5000"
+#     depends_on:
+#       - "mongo"
+#   mongo:
+#     image: "mongo"
+#     ports:
+#       - "27017:27017"
+
+
 version: '3'
+networks:
+  node-network:
+    external:
+      name: node-network
 services:
   web:
     image: docker-node-mongo
     build: .
-    command: "npm start"
     ports:
       - "5000:5000"
     depends_on:
       - "mongo"
+    environment:
+      - CONNECTION_URL=${CONNECTION_URL}
+      - PORT=${PORT}
+    networks:
+      - node-network
   mongo:
     image: "mongo"
     ports:
       - "27017:27017"
+    networks:
+      - node-network
